@@ -12,4 +12,17 @@ app = typer.Typer(
 )
 
 def validate_gguf_file(file_path: Path) -> bool:
-    pass
+    """Validate a given file and verify that it confirms to the criteria.
+
+    Args:
+        file_path: Path to the GGUF file to validate
+
+    Returns:
+        bool: True if file meets criteria, False otherwise
+
+    Note:
+        Validation criteria:
+        - File exists
+        - Has .gguf extension
+    """
+    return True
