@@ -47,3 +47,6 @@ def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add."
     if not validate_gguf_file(file_path):
         return
     console.print(f"[green] Valid GGUF file: {file_path.name}[/green]")
+
+if __name__ == "__main__":
+    app()
