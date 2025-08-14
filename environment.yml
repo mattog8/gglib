@@ -1,0 +1,8 @@
+name: gglib-env
+channels: 
+  - defaults
+  - conda-forge
+dependencies:
+  - python = 3.11.2
+  - typer = 0.16.0
+prefix: ./venv
