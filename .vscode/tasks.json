@@ -1,0 +1,20 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Conda: setup ./venv (create-or-update)",
+      "type": "shell",
+      "command": "if [ ! -f environment.yml ]; then echo 'Warning: environment.yml not found. Creating basic Python 3.11 environment...'; CMD='create --prefix ./venv python=3.11'; elif [ -d ./venv ]; then CMD='env update --prefix ./venv --file environment.yml --prune'; else CMD='env create --prefix ./venv --file environment.yml'; fi; source \"$HOME/miniconda3/etc/profile.d/conda.sh\" 2>/dev/null || source \"/opt/anaconda3/etc/profile.d/conda.sh\" 2>/dev/null || true; conda $CMD && echo '' && echo 'Conda environment created/updated successfully!' && echo '' && echo 'Next steps to set Python interpreter in VS Code:' && echo '   1. Press Cmd+Shift+P (Command Palette)' && echo '   2. Type: Python: Select Interpreter' && echo '   3. Choose: ./venv/bin/python (Python 3.11.2)' && echo '   OR' && echo '   4. Choose: Enter interpreter path...' && echo '   5. Type: ./venv/bin/python' && echo '' && echo ' Interpreter path: $(pwd)/venv/bin/python'",
+      "options": {
+        "shell": {
+          "executable": "bash",
+          "args": ["-lc"]
+        }
+      },
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
