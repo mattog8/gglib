@@ -29,7 +29,7 @@ def validate_gguf_file(file_path: Path) -> bool:
         - Has .gguf extension
     """
     if not file_path.exists():
-        console.print(f"[red]Note a File {file_path}[/red]")
+        console.print(f"[red]Not a File {file_path}[/red]")
         return False
     
     if not file_path.is_file():
