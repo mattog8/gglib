@@ -31,5 +31,9 @@ def validate_gguf_file(file_path: Path) -> bool:
     if not file_path.exists():
         console.print(f"[red]Note a File {file_path} [/red]")
         return False
-    # TODO: Add other checks.
+    
+    if not file_path.is_file():
+        console.print(f"[red]Not a file: {file_path} [/red]")
+        return False
+    # TODO: Add GGUF extension check
     return True
