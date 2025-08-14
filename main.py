@@ -1,5 +1,4 @@
-"""
-gglib - GGUF model manager and runner.
+"""gglib - GGUF model manager and runner.
 """
 
 import typer
