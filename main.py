@@ -4,12 +4,15 @@ gglib - GGUF model manager and runner.
 
 import typer
 from pathlib import Path
+from rich.console import Console
 
 app = typer.Typer(
     name="gglib",
     help="Manage and run local GGUF models",
     no_args_is_help=True
 )
+
+console = Console()
 
 def validate_gguf_file(file_path: Path) -> bool:
     """Validate a given file and verify that it confirms to the criteria.
@@ -25,4 +28,8 @@ def validate_gguf_file(file_path: Path) -> bool:
         - File exists
         - Has .gguf extension
     """
+    if not file_path.exists():
+        console.print(f"[red]Note a File {file_path} [/red]")
+        return False
+    # TODO: Add other checks.
     return True
