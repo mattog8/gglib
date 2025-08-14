@@ -40,3 +40,8 @@ def validate_gguf_file(file_path: Path) -> bool:
         console.print(f"[red]This application only support GGUF files and the .gguf extension was not detected: {file_path}[/red]")
         return False
     return True
+
+@app.command()
+def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add.")):
+    """Add a GGUF model."""
+    pass
