@@ -44,4 +44,6 @@ def validate_gguf_file(file_path: Path) -> bool:
 @app.command()
 def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add.")):
     """Add a GGUF model."""
-    pass
+    if not validate_gguf_file(file_path):
+        return
+    console.print(f"[green] Valid GGUF file: {file_path.name}[/green]")
