@@ -11,3 +11,20 @@ class Database:
         db_path: Path to the SQLite database file
         """
         self.db_path = db_path
+        self.db_init()
+
+    def db_init(self):
+        """Create models table in SQLite database if it doesn't already exist."""
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS models (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    parameters REAL NOT NULL,
+                    max_context INTEGER NOT NULL,
+                    file_path TEXT UNIQUE NOT NULL,
+                    file_size INTEGER NOT NULL,
+                    created_on TEXT NOT NULL
+                )
+            """)
+            conn.commit()
