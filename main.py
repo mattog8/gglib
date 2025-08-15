@@ -4,6 +4,9 @@
 import typer
 from pathlib import Path
 from rich.console import Console
+from datetime import datetime
+
+from models import Model
 
 app = typer.Typer(
     name="gglib",
@@ -56,10 +59,21 @@ def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add."
     """
     if not validate_gguf_file(file_path):
         return
+    
     model_name = typer.prompt("Model name")
     model_params = typer.prompt("Parameters")
     model_max_ctx = typer.prompt("Maximum context size")
-    console.print(f"[purple]{model_name}[/purple] [green]has been added.[/green]")
+
+    model = Model(
+        name=model_name,
+        parameters=model_params, 
+        max_context=model_max_ctx,
+        file_path=file_path,
+        file_size=file_path.stat().st_size,
+        created_on=datetime.now().isoformat()
+    )
+
+    console.print(f"[purple]{model.name}[/purple] [green]has been added.[/green]")
 
 if __name__ == "__main__":
     app()
