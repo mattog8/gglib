@@ -42,9 +42,19 @@ def validate_gguf_file(file_path: Path) -> bool:
 
 @app.command()
 def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add.")):
-    """Add a GGUF model."""
+    """Validates and collects metadata of a GGUF filepath.
+    
+    Args:
+        file_path: Path to the GGUF file to validate and add
+
+    Note:
+        After validation, prompts user for model details including:
+        - Model name
+        
+    """
     if not validate_gguf_file(file_path):
         return
+    model_name = typer.prompt("Model name")
     console.print(f"[green] Valid GGUF file: {file_path.name}[/green]")
 
 if __name__ == "__main__":
