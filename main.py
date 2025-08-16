@@ -7,6 +7,7 @@ from datetime import datetime
 
 from models import Model
 from database import Database
+from services import ProcessService
 
 app = typer.Typer(
     name="gglib",
@@ -16,6 +17,7 @@ app = typer.Typer(
 
 console = Console()
 db = Database()
+process_service = ProcessService()
 
 def validate_gguf_file(file_path: Path) -> bool:
     """Validate a given file and verify that it confirms to the criteria.
@@ -77,6 +79,24 @@ def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add."
     db.add_model(model)
 
     console.print(f"[purple]{model.name}[/purple] [green]has been added.[/green]")
+
+@app.command()
+def serve(model_id: int = typer.Argument(..., help = "Model ID to serve.")):
+    """Serve a model by providing its database ID.
+    
+    :param model_id: Database ID of the model to serve
+    :type model_id: int
+    """
+    model = db.get_model_by_id(model_id)
+    if not model: 
+        console.print(f"[red]Model with ID {model_id}[/red]")
+        return
+    result = process_service.start_server(model.file_path)
+
+    if result.returncode == 0:
+        console.print(f"[green]Server started successfully with {model.name}[/green]")
+    else:
+        console.print(f"[red]Failed to start server (exit code: {result.returncode})[/red]")
 
 if __name__ == "__main__":
     app()
