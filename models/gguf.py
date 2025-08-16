@@ -6,20 +6,25 @@ from datetime import datetime
 
 @dataclass
 class Model: 
-    """Represents a GGUF model with metadata collected during registration.
+    """Represent a GGUF model with metadata collected during registration.
     
     This dataclass stores essential information about a GGUF (GPT-Generated Unified Format)
     model file, including its configuration parameters and filesystem details.
     
-    Attributes:
-        name (str): Human-readable name/identifier for the model
-        parameters (float): Number of parameters in the model (e.g., 7.0 for 7B parameters)
-        max_context (int): Maximum context window size the model supports
-        file_path (Path): Absolute path to the .gguf model file
-        file_size (int): Size of the model file in bytes
-        created_on (str): ISO format timestamp when the model was added to the registry
+    :param name: Human-readable name/identifier for the model
+    :type name: str
+    :param parameters: Number of parameters in the model (e.g., 7.0 for 7B parameters)  
+    :type parameters: float
+    :param max_context: Maximum context window size the model supports
+    :type max_context: int
+    :param file_path: Absolute path to the .gguf model file
+    :type file_path: Path
+    :param file_size: Size of the model file in bytes
+    :type file_size: int
+    :param created_on: ISO format timestamp when the model was added to the registry
+    :type created_on: str
         
-    Example:
+    Example::     
         >>> model = Model(
         ...     name="Llama-2-7B-Chat",
         ...     parameters=7.0,
