@@ -1,6 +1,7 @@
 """Database operations."""
 
 import sqlite3
+from models import Model
 
 class Database:
     """SQLite database for model storage."""
@@ -28,3 +29,33 @@ class Database:
                 )
             """)
             conn.commit()
+
+    def add_model(self, model: Model) -> bool:
+        """Add a model to the database.
+        
+        Args:
+            model (Model): Model object to store
+
+        Returns:
+            bool: True if commit to database successful
+        """
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("""
+                        INSERT INTO models (
+                            name,
+                            parameters, 
+                            max_context,
+                            file_path,
+                            file_size,
+                            created_on 
+                        ) VALUES (?, ?, ?, ?, ?, ?)
+                """, (
+                    model.name,
+                    model.parameters,
+                    model.max_context,
+                    str(model.file_path),
+                    model.file_size,
+                    model.created_on
+                ))
+            conn.commit()
+            return True
