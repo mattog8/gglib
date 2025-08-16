@@ -5,6 +5,7 @@ from database import Database
 from models import Model
 
 def test_get_model_by_id_returns_model(tmp_path):
+    """Test that get_model_by_id returns the correct model when it exists in the database."""
     db = Database(str(tmp_path / "test.db"))
     model = Model(
         name="Test Model",
@@ -21,5 +22,6 @@ def test_get_model_by_id_returns_model(tmp_path):
     assert fetched.name == "Test Model"
 
 def test_get_model_by_id_missing_returns_none(tmp_path):
+    """Test that get_model_by_id returns None when the requested model ID doesn't exist."""
     db = Database(str(tmp_path / "test.db"))
     assert db.get_model_by_id(99) is None
