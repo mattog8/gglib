@@ -6,4 +6,5 @@ dependencies:
   - python = 3.11.2
   - typer = 0.16.0
   - pytest = 8.4.1
+  - pytest-cov = 6.2.1
 prefix: ./venv
