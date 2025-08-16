@@ -13,6 +13,8 @@ omit = [
     "tests/*",
     "*/__pycache__/*",
     "*/site-packages/*",
+    "main.py",
+    "models/*",
 ]
 
 [tool.coverage.report]
