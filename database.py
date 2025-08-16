@@ -10,8 +10,8 @@ class Database:
     def __init__(self, db_path: str = 'models.db'):
         """Initialise SQLite database.
         
-        Args:
-            db_path (str) : Path to the SQLite database file
+        :param db_path: Path to the SQLite database file
+        :type db_path: str
         """
         self.db_path = db_path
         self.db_init()
@@ -35,11 +35,11 @@ class Database:
     def add_model(self, model: Model) -> bool:
         """Add a model to the database.
         
-        Args:
-            model (Model): Model object to store
+        :param model: Model object to store
+        :type model: Model
 
-        Returns:
-            bool: True if commit to database successful
+        :returns: True if commit to database successful
+        :rtype: bool
         """
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("""INSERT INTO models (

@@ -1,5 +1,4 @@
-"""gglib - GGUF model manager and runner.
-"""
+"""gglib - GGUF model manager and runner."""
 
 import typer
 from pathlib import Path
@@ -21,13 +20,13 @@ db = Database()
 def validate_gguf_file(file_path: Path) -> bool:
     """Validate a given file and verify that it confirms to the criteria.
 
-    Args:
-        file_path: Path to the GGUF file to validate
+    :param file_path: Path to the GGUF file to validate
+    :type file_path: Path
 
-    Returns:
-        bool: True if file meets criteria, False otherwise
+    :returns: True if file meets criteria, False otherwise
+    :rtype: bool
 
-    Note:
+    .. note::
         Validation criteria:
         - File exists
         - Has .gguf extension
@@ -47,12 +46,12 @@ def validate_gguf_file(file_path: Path) -> bool:
 
 @app.command()
 def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add.")):
-    """Validates and collects metadata of a GGUF filepath then adds it to the SQLite database.
+    """Validate and collect metadata of a GGUF filepath then add it to the SQLite database.
     
-    Args:
-        file_path: Path to the GGUF file to validate and add to database
+    :param file_path: Path to the GGUF file to validate and add to database
+    :type file_path: Path
 
-    Note:
+    .. note::
         After validation, prompts user for model details including:
         - Model name
         - Parameters
