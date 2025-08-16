@@ -1,6 +1,8 @@
 """Database operations."""
 
 import sqlite3
+from pathlib import Path
+
 from models import Model
 
 class Database:
@@ -9,7 +11,7 @@ class Database:
         """Initialise SQLite database.
         
         Args:
-        db_path: Path to the SQLite database file
+            db_path (str) : Path to the SQLite database file
         """
         self.db_path = db_path
         self.db_init()
@@ -40,15 +42,14 @@ class Database:
             bool: True if commit to database successful
         """
         with sqlite3.connect(self.db_path) as conn:
-            conn.execute("""
-                        INSERT INTO models (
+            conn.execute("""INSERT INTO models (
                             name,
                             parameters, 
                             max_context,
                             file_path,
                             file_size,
-                            created_on 
-                        ) VALUES (?, ?, ?, ?, ?, ?)
+                            created_on
+                         ) VALUES (?, ?, ?, ?, ?, ?)
                 """, (
                     model.name,
                     model.parameters,
@@ -59,3 +60,29 @@ class Database:
                 ))
             conn.commit()
             return True
+        
+    def get_model_by_id(self, model_id: int) -> Model | None:
+        """Return a Model object for the given ID.
+
+        :param model_id: The unique ID of the Model in the SQLite database.
+        :type model_id: int
+
+        :returns: The Model object if found, otherwise None.
+        :rtype: Model | None
+        """
+        with sqlite3.connect(self.db_path) as conn: 
+            cursor = conn.execute(
+                """SELECT id, name, parameters, max_context, file_path, file_size, created_on
+                    FROM models WHERE id = ?""", (model_id,)
+             )
+            row = cursor.fetchone()
+            if row: 
+                return Model(
+                    name=row[1],
+                    parameters=row[2],
+                    max_context=row[3],
+                    file_path=Path(row[4]),
+                    file_size=row[5],
+                    created_on=row[6]
+                )
+            return None
