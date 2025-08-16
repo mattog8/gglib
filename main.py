@@ -7,6 +7,7 @@ from rich.console import Console
 from datetime import datetime
 
 from models import Model
+from database import Database
 
 app = typer.Typer(
     name="gglib",
@@ -15,6 +16,7 @@ app = typer.Typer(
 )
 
 console = Console()
+db = Database()
 
 def validate_gguf_file(file_path: Path) -> bool:
     """Validate a given file and verify that it confirms to the criteria.
@@ -45,10 +47,10 @@ def validate_gguf_file(file_path: Path) -> bool:
 
 @app.command()
 def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add.")):
-    """Validates and collects metadata of a GGUF filepath.
+    """Validates and collects metadata of a GGUF filepath then adds it to the SQLite database.
     
     Args:
-        file_path: Path to the GGUF file to validate and add
+        file_path: Path to the GGUF file to validate and add to database
 
     Note:
         After validation, prompts user for model details including:
@@ -72,6 +74,8 @@ def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add."
         file_size=file_path.stat().st_size,
         created_on=datetime.now().isoformat()
     )
+
+    db.add_model(model)
 
     console.print(f"[purple]{model.name}[/purple] [green]has been added.[/green]")
 
