@@ -91,12 +91,13 @@ def serve(model_id: int = typer.Argument(..., help = "Model ID to serve.")):
     if not model: 
         console.print(f"[red]Model with ID {model_id}[/red]")
         return
-    result = process_service.start_server(model.file_path)
+    console.print(f"[blue]Serving {model.name}...[/blue]")
+    console.print(f"[yellow]Press Ctrl+C to stop the server[/yellow]")
 
-    if result.returncode == 0:
-        console.print(f"[green]Server started successfully with {model.name}[/green]")
-    else:
-        console.print(f"[red]Failed to start server (exit code: {result.returncode})[/red]")
+    try:
+        process_service.start_server(model.file_path)
+    except KeyboardInterrupt:
+        console.print(f"[blue]Server stoppeed[/blue]")
 
 if __name__ == "__main__":
     app()
