@@ -3,7 +3,9 @@
 import typer
 from pathlib import Path
 from rich.console import Console
+from rich.table import Table
 from datetime import datetime
+from typing import List
 
 from models import Model
 from database import Database
@@ -79,6 +81,21 @@ def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add."
     db.add_model(model)
 
     console.print(f"[purple]{model.name}[/purple] [green]has been added.[/green]")
+
+@app.command()
+def lib(models: List):
+    """View the library: print models in the database.
+    
+    :param models: List of models to display
+    :type models: list
+    """
+    models = db.list()
+
+    if not models:
+        console.print("[yellow]No models found in database[/yellow]")
+
+
+
 
 @app.command()
 def serve(model_id: int = typer.Argument(..., help = "Model ID to serve.")):
