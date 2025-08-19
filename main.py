@@ -70,6 +70,7 @@ def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add."
     model_max_ctx = typer.prompt("Maximum context size")
 
     model = Model(
+        id=None,
         name=model_name,
         parameters=model_params, 
         max_context=model_max_ctx,
@@ -101,7 +102,7 @@ def lib():
 
     for model in models:
         table.add_row(
-            "hi",
+            str(model.id),
             model.name
         )
     console.print(table)

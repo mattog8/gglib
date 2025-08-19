@@ -40,3 +40,4 @@ class Model:
     file_path: Path
     file_size: int
     created_on: str
+    id: int = None

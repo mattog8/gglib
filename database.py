@@ -78,6 +78,7 @@ class Database:
             row = cursor.fetchone()
             if row: 
                 return Model(
+                    id=row[0],
                     name=row[1],
                     parameters=row[2],
                     max_context=row[3],
@@ -110,6 +111,7 @@ class Database:
             models = []
             for row in cursor:
                 models.append(Model(
+                    id=row[0],
                     name=row[1],
                     parameters=row[2], 
                     max_context=row[3],
