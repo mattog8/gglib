@@ -83,7 +83,7 @@ def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add."
     console.print(f"[purple]{model.name}[/purple] [green]has been added.[/green]")
 
 @app.command()
-def lib(models: List):
+def lib():
     """View the library: print models in the database.
     
     :param models: List of models to display
@@ -93,9 +93,18 @@ def lib(models: List):
 
     if not models:
         console.print("[yellow]No models found in database[/yellow]")
+        return
 
+    table = Table(title=f"Models ({len(models)}) found")
+    table.add_column("ID")
+    table.add_column("Name")
 
-
+    for model in models:
+        table.add_row(
+            "hi",
+            model.name
+        )
+    console.print(table)
 
 @app.command()
 def serve(model_id: int = typer.Argument(..., help = "Model ID to serve.")):
