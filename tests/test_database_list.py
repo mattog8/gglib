@@ -36,10 +36,10 @@ def test_list_single_model_returns_model(tmp_path):
     assert m.file_size == 1234
     assert m.id is not None
 
-def test_list_multiple_model_returns_model(tmp_path):
+def test_list_multiple_models_returns_models(tmp_path):
     """Multiple models are inserted and returned with matching fields."""
     db = Database(str(tmp_path / "models.db"))
-    model_data = {
+    model_data = { #Dictionary holding test model metadata (3 models).
         "name": 
             [f"Test Model {x}" for x in range(1,4)],
         "parameters": 
@@ -53,13 +53,27 @@ def test_list_multiple_model_returns_model(tmp_path):
         "created_on": 
             [datetime.now().isoformat() for _ in range (1,4)]
         }
-    for i in range(3):
+    
+    for i in range(3): #Loop to instantiate test models.
         model = Model(
             name=model_data["name"][i],
             parameters=model_data["parameters"][i],
             max_context=model_data["max_context"][i],
-            file_path=model_data["max_context"][i],
+            file_path=model_data["file_path"][i],
             file_size=model_data["file_size"][i],
             created_on=model_data["created_on"][i]
         )
         db.add_model(model)
+
+    result = db.list()
+    assert len(result) == 3
+
+    for i, model in enumerate(result): #Loop through enumeration of list return.
+        assert model.name == model_data["name"][i]
+        assert model.parameters == model_data["parameters"][i]
+        assert model.max_context == model_data["max_context"][i]
+        assert model.file_path == model_data["file_path"][i]
+        assert model.file_size == model_data["file_size"][i]
+        assert model.created_on == model_data["created_on"][i]
+        assert model.id is not None
+
