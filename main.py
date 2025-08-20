@@ -92,7 +92,7 @@ def lib():
     """
     models = db.list()
 
-    if not models:
+    if not models: #show alert that no models were returned
         console.print("[yellow]No models found in database[/yellow]")
         return
 
@@ -100,7 +100,7 @@ def lib():
     table.add_column("ID")
     table.add_column("Name")
 
-    for model in models:
+    for model in models: #add rows to the table
         table.add_row(
             str(model.id),
             model.name
@@ -108,23 +108,36 @@ def lib():
     console.print(table)
 
 @app.command()
-def serve(model_id: int = typer.Argument(..., help = "Model ID to serve.")):
+def serve(
+        model_id: int = typer.Argument(
+            ..., 
+            help = "Model ID to serve."
+        ),
+        context: int | None = typer.Option(
+            None, 
+            '-c', 
+            '--context',
+            help="Specify a context length when serving a model"
+        )
+    ):
     """Serve a model by providing its database ID.
     
     :param model_id: Database ID of the model to serve
     :type model_id: int
+    :param context: Context length flag for serve command. None by default
+    :type context: int | None
     """
     model = db.get_model_by_id(model_id)
-    if not model: 
-        console.print(f"[red]Model with ID {model_id}[/red]")
+    if not model: #Show an error if the model is not found
+        console.print(f"[red]Model with ID {model_id} not found.[/red]")
         return
     console.print(f"[blue]Serving {model.name}...[/blue]")
     console.print(f"[yellow]Press Ctrl+C to stop the server[/yellow]")
 
     try:
-        process_service.start_server(model.file_path)
+        process_service.start_server(model.file_path, context)
     except KeyboardInterrupt:
-        console.print(f"[blue]Server stoppeed[/blue]")
+        console.print(f"[blue]Server stopped[/blue]")
 
 if __name__ == "__main__":
     app()
