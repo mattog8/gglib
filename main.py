@@ -3,7 +3,9 @@
 import typer
 from pathlib import Path
 from rich.console import Console
+from rich.table import Table
 from datetime import datetime
+from typing import List
 
 from models import Model
 from database import Database
@@ -68,6 +70,7 @@ def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add."
     model_max_ctx = typer.prompt("Maximum context size")
 
     model = Model(
+        id=None,
         name=model_name,
         parameters=model_params, 
         max_context=model_max_ctx,
@@ -79,6 +82,30 @@ def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add."
     db.add_model(model)
 
     console.print(f"[purple]{model.name}[/purple] [green]has been added.[/green]")
+
+@app.command()
+def lib():
+    """View the library: print models in the database.
+    
+    :param models: List of models to display
+    :type models: list
+    """
+    models = db.list()
+
+    if not models:
+        console.print("[yellow]No models found in database[/yellow]")
+        return
+
+    table = Table(title=f"Models ({len(models)}) found")
+    table.add_column("ID")
+    table.add_column("Name")
+
+    for model in models:
+        table.add_row(
+            str(model.id),
+            model.name
+        )
+    console.print(table)
 
 @app.command()
 def serve(model_id: int = typer.Argument(..., help = "Model ID to serve.")):

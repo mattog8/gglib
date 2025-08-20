@@ -78,6 +78,7 @@ class Database:
             row = cursor.fetchone()
             if row: 
                 return Model(
+                    id=row[0],
                     name=row[1],
                     parameters=row[2],
                     max_context=row[3],
@@ -86,3 +87,36 @@ class Database:
                     created_on=row[6]
                 )
             return None
+        
+    def list(self) -> list[Model]:
+        """Get all models from the database.
+
+        :returns: List of all Model objects in the database. Returns empty list if no models found.
+        :rtype: list[Model]
+
+        .. note::
+            Models are returned in the order they appear in the database.
+    """
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.execute("""SELECT
+                                  id,
+                                  name,
+                                  parameters,
+                                  max_context,
+                                  file_path,
+                                  file_size,
+                                  created_on
+                                  FROM models
+                                  """)
+            models = []
+            for row in cursor:
+                models.append(Model(
+                    id=row[0],
+                    name=row[1],
+                    parameters=row[2], 
+                    max_context=row[3],
+                    file_path=Path(row[4]),
+                    file_size=row[5],
+                    created_on=row[6]
+                ))
+            return models
