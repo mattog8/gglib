@@ -8,7 +8,7 @@ from datetime import datetime
 from typing import List
 
 from models import Model
-from database import Database
+from repositories import SqliteModelRepository
 from services import ProcessService
 
 app = typer.Typer(
@@ -18,7 +18,7 @@ app = typer.Typer(
 )
 
 console = Console()
-db = Database()
+model_repo = SqliteModelRepository()
 process_service = ProcessService()
 
 def validate_gguf_file(file_path: Path) -> bool:
@@ -79,7 +79,7 @@ def add(file_path: Path = typer.Argument(..., help = "Path to GGUF file to add."
         created_on=datetime.now().isoformat()
     )
 
-    db.add_model(model)
+    model_repo.add_model(model)
 
     console.print(f"[purple]{model.name}[/purple] [green]has been added.[/green]")
 
@@ -90,7 +90,7 @@ def lib():
     :param models: List of models to display
     :type models: list
     """
-    models = db.list()
+    models = model_repo.list()
 
     if not models: #show alert that no models were returned
         console.print("[yellow]No models found in database[/yellow]")
@@ -127,7 +127,7 @@ def serve(
     :param context: Context length flag for serve command. None by default
     :type context: int | None
     """
-    model = db.get_model_by_id(model_id)
+    model = model_repo.get_model_by_id(model_id)
     if not model: #Show an error if the model is not found
         console.print(f"[red]Model with ID {model_id} not found.[/red]")
         return
