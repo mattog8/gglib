@@ -1,7 +1,7 @@
 from pathlib import Path
 from datetime import datetime
 
-from database import Database
+from repositories import SqliteModelRepository
 from models import Model
 
 def test_get_model_by_id_returns_model(tmp_path):
@@ -10,7 +10,7 @@ def test_get_model_by_id_returns_model(tmp_path):
     :param tmp_path: Pytest temporary directory fixture
     :type tmp_path: Path
     """
-    db = Database(str(tmp_path / "test.db"))
+    repo = SqliteModelRepository(str(tmp_path / "test.db"))
     model = Model(
         name="Test Model",
         parameters=7.9,
@@ -19,9 +19,9 @@ def test_get_model_by_id_returns_model(tmp_path):
         file_size=12345,
         created_on=datetime.now().isoformat()
     )
-    db.add_model(model)
+    repo.add_model(model)
 
-    fetched = db.get_model_by_id(1)
+    fetched = repo.get_model_by_id(1)
     assert fetched is not None
     assert fetched.name == "Test Model"
 
@@ -31,5 +31,5 @@ def test_get_model_by_id_missing_returns_none(tmp_path):
     :param tmp_path: Pytest temporary directory fixture
     :type tmp_path: Path
     """    
-    db = Database(str(tmp_path / "test.db"))
-    assert db.get_model_by_id(99) is None
+    repo = SqliteModelRepository(str(tmp_path / "test.db"))
+    assert repo.get_model_by_id(99) is None

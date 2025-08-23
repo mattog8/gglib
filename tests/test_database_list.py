@@ -3,19 +3,19 @@
 from pathlib import Path
 from datetime import datetime
 
-from database import Database
+from repositories import SqliteModelRepository
 from models import Model
 
 def test_list_empty_returns_empty_list(tmp_path):
     """Empty database returns an empty list."""
-    db = Database(str(tmp_path / "models.db"))
-    result = db.list()
+    repo = SqliteModelRepository(str(tmp_path / "models.db"))
+    result = repo.list()
     assert result == []
     assert isinstance(result, list)
 
 def test_list_single_model_returns_model(tmp_path):
     """Single inserted model is returned with matching fields."""
-    db = Database(str(tmp_path / "models.db"))
+    repo = SqliteModelRepository(str(tmp_path / "models.db"))
     model = Model(
         name="Test Model",
         parameters=7.0,
@@ -25,8 +25,8 @@ def test_list_single_model_returns_model(tmp_path):
         created_on=datetime.now().isoformat()
     )
 
-    db.add_model(model)
-    result = db.list()
+    repo.add_model(model)
+    result = repo.list()
     assert len(result) == 1
     m = result[0]
     assert m.name == "Test Model"
@@ -38,7 +38,7 @@ def test_list_single_model_returns_model(tmp_path):
 
 def test_list_multiple_models_returns_models(tmp_path):
     """Multiple models are inserted and returned with matching fields."""
-    db = Database(str(tmp_path / "models.db"))
+    repo = SqliteModelRepository(str(tmp_path / "models.db"))
     model_data = { #Dictionary holding test model metadata (3 models).
         "name": 
             [f"Test Model {x}" for x in range(1,4)],
@@ -63,9 +63,9 @@ def test_list_multiple_models_returns_models(tmp_path):
             file_size=model_data["file_size"][i],
             created_on=model_data["created_on"][i]
         )
-        db.add_model(model)
+        repo.add_model(model)
 
-    result = db.list()
+    result = repo.list()
     assert len(result) == 3
 
     for i, model in enumerate(result): #Loop through enumeration of list return.
