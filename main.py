@@ -139,5 +139,37 @@ def serve(
     except KeyboardInterrupt:
         console.print(f"[blue]Server stopped[/blue]")
 
+@app.command()
+def chat(
+        model_id: int = typer.Argument(
+            ..., 
+            help = "Model ID to chat with."
+        ),
+        context: int | None = typer.Option(
+            None, 
+            '-c', 
+            '--context',
+            help="Specify a context length when chatting with a model"
+        )
+    ):
+    """Start an interactive chat session with a model by providing its database ID.
+    
+    :param model_id: Database ID of the model to chat with
+    :type model_id: int
+    :param context: Context length flag for chat command. None by default
+    :type context: int | None
+    """
+    model = db.get_model_by_id(model_id)
+    if not model: #Show an error if the model is not found
+        console.print(f"[red]Model with ID {model_id} not found.[/red]")
+        return
+    console.print(f"[blue]Starting chat with {model.name}...[/blue]")
+    console.print(f"[yellow]Press Ctrl+C to exit chat[/yellow]")
+
+    try:
+        process_service.start_cli(model.file_path, context)
+    except KeyboardInterrupt:
+        console.print(f"[blue]Chat session ended[/blue]")
+
 if __name__ == "__main__":
     app()
